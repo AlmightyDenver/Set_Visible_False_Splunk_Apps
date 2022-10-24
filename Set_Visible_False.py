@@ -16,6 +16,7 @@ from os import listdir
 from os.path import isdir, isfile, join
 import configparser
 
+
 # mypath = '/Users/denver/Downloads/viz_apps_copy'
 mypath = ''
 

@@ -4,4 +4,4 @@ Set invicible all splunk apps in specific direcoty (Untar apps, create /local/ap
 # requirements
 python3
 
-Just enter directory where splunk apps exist.
+# Just enter directory where splunk apps exist.
