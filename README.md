@@ -18,7 +18,7 @@ python3
 
 
 ## examples
-unzip, set is_visible = 0 and check_for_updates = 0 to all apps in /my/path/dir
+unzip, set is_visible = 0 and check_for_updates = 0 to all apps in /my/path/dir  
 python Set_Visible_False.py -d /my/path/dir
 
 set is_visible = 0 and check_for_updates = 0 in all apps in /my/path/dir (pass unzip)
@@ -32,4 +32,3 @@ python Set_Visible_False.py -d /my/path/dir -v 1
 
 set is_visible = 0 and check_for_updates = 1 in all apps in /my/path/dir
 python Set_Visible_False.py -d /my/path/dir -u 1
-
