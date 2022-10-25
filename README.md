@@ -7,9 +7,13 @@ python3
 # How To Use
 ## args
 '--dir', '-d', dest='dir', help='(required) Enter app directory'
+
 '--unzip', '-z', dest='unzip', help='(Optional) Unzip .tgz files or NOT [0|1] (default 1)', default=1, type=int
+
 '--keyword', '-k', dest='keyword', help='(Optional) Enter appname keyworkd (ex viz / visualization ..) (default : set all apps in dir'), default=''
+
 '--isvisible', '-v', dest='isvisible', help='(Optional) Set is_visible = [0|1] (default 0)', default=0, type=int)
+
 '--update', '-u', dest='update', help='(Optional) Set check_for_updates = [0|1] (default 0)', default=0, type=int)
 
 
