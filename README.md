@@ -1,34 +1,43 @@
 # Set_Visible_False_Splunk_Apps
+
 Set invicible all splunk apps in specific direcoty (Untar apps, create /local/apps.conf file)
 
 # requirements
+
 python3
 
 # How To Use
+
 ## args
-'--dir', '-d', help='(required) Enter app directory'. 
+
+'--dir', '-d', help='(required) Enter app directory'.
 
 '--unzip', '-z', help='(Optional) Unzip .tgz files or NOT [0|1]', default=1, type=int
 
-'--keyword', '-k',  help='(Optional) Enter appname keyworkd (ex viz / visualization ..) default=''(set all apps)
+'--keyword', '-k', help='(Optional) Enter appname keyworkd (ex viz / visualization ..) default=''(set all apps)
 
-'--isvisible', '-v', help='(Optional) Set is_visible = [0|1] ', default=0, type=int.
+'--isvisible', '-v', help='(Optional) Set is_visible = [0|1]', default=0, type=int.
 
-'--update', '-u', help='(Optional) Set check_for_updates = [0|1] , default=0, type=int
+'--update', '-u', help='(Optional) Set check_for_updates = [0|1]', default=0, type=int
 
+'--remove', '-r', help='(Optional) remove .tgz file [0|1], default=0, type=int)
 
 ## examples
+
 unzip, set is_visible = 0 and check_for_updates = 0 to all apps in /my/path/dir  
 python Set_Visible_False.py -d /my/path/dir
 
-set is_visible = 0 and check_for_updates = 0 in all apps in /my/path/dir (pass unzip)
+set is_visible = 0 and check_for_updates = 0 in all apps in /my/path/dir (pass unzip)  
 python Set_Visible_False.py -d /my/path/dir -z 0
 
-set is_visible = 0 and check_for_updates = 0 in all '*viz*' apps in /my/path/dir
+set is_visible = 0 and check_for_updates = 0 in all '_ viz _' apps in /my/path/dir  
 python Set_Visible_False.py -d /my/path/dir -k viz
 
-set is_visible = 1 and check_for_updates = 0 in all apps in /my/path/dir
+set is_visible = 1 and check_for_updates = 0 in all apps in /my/path/dir  
 python Set_Visible_False.py -d /my/path/dir -v 1
 
-set is_visible = 0 and check_for_updates = 1 in all apps in /my/path/dir
+set is_visible = 0 and check_for_updates = 1 in all apps in /my/path/dir  
 python Set_Visible_False.py -d /my/path/dir -u 1
+
+remove all .tgz files after unzip, edit settings in /my/path/dir  
+python Set_Visible_False.py -d /my/path/dir -r 1

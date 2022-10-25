@@ -18,12 +18,8 @@ import configparser # .conf
 import argparse #input
 import re #regtex
 
-# from datetime import datetime, date
-import datetime
-
-
 # mypath = '/Users/denver/Downloads/viz_apps_copy'
-flag = [0, 0, 0, 0]
+flag = [0, 0, 0, 0, 0]
 
 
 def init_page():
@@ -64,6 +60,7 @@ def input():
     parser.add_argument('--keyword', '-k', dest='keyword', help='(Optional) Enter appname keyworkd (ex viz / visualization ..) (default : set all apps in dir)', default='')
     parser.add_argument('--isvisible', '-v', dest='isvisible', help='(Optional) Set is_visible = [0|1] (default 0)', default=0, type=int)
     parser.add_argument('--update', '-u', dest='update', help='(Optional) Set check_for_updates = [0|1] (default 0)', default=0, type=int)
+    parser.add_argument('--remove', '-r', dest='remove', help='(Optional) remove .tgz file [0|1] (default 0)', default=0, type=int)
     args = parser.parse_args()
     global mypath
     mypath = args.dir
@@ -73,6 +70,7 @@ def input():
     flag[1] = 0 if keyword == '' else 1
     flag[2] = args.isvisible
     flag[3] = args.update
+    flag[4] = args.remove
 
     # check input data
     try:
@@ -148,6 +146,26 @@ def set_config(path):
         config.write(f)
 
 
+def remove_tgz():
+    # get all file list
+    file_list = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+    # init progress bar
+    pb, total_len = init_pb(len(file_list))
+    
+    for file in file_list:
+        # add progress bar count
+        pb += 1
+        #unzip .tgz file 
+        file = join(mypath, file)
+        if tarfile.is_tarfile(file):
+            try:
+                os.remove(file)
+            except Exception as e:
+                print(e)
+            #draw progress bar
+            draw_pb(pb, total_len, 'Remove')
+
+
 # ========== main ==========    
 if __name__ == "__main__": 
     # print ascii art
@@ -160,7 +178,7 @@ if __name__ == "__main__":
         unzip_dir()
         sys.stdout.write('\n')
     
-    # set apps.conf
+    # Set apps.conf
     # get all dir list
     if flag[1] == 0:
         dir_list = [dir for dir in listdir(mypath) if isdir(join(mypath, dir))]
@@ -169,7 +187,6 @@ if __name__ == "__main__":
     # init progress bar
     pb, total_len = init_pb(len(dir_list))
     
-    # set apps.conf
     for dir in dir_list: 
         pb += 1
         try:
@@ -178,7 +195,12 @@ if __name__ == "__main__":
             print(e)
         # draw progress bar
         draw_pb(pb, total_len, 'Set Config')
+    sys.stdout.write('\n')
         
+    # remove .tgz files
+    if flag[4] == 1:
+        remove_tgz()
+    
     
     print('\n\nDone!')
 
