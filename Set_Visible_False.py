@@ -11,7 +11,8 @@
 
 
 import tarfile
-import os, sys
+import os
+import sys
 from os import listdir
 from os.path import isdir, isfile, join
 import configparser # .conf
@@ -43,17 +44,18 @@ def init_pb(leng):
     total_len = leng
     return pb, total_len
 
+
 # ========== draw progress bar ==========
 def draw_pb(pb, total_len, title):
     perc = int(pb / total_len * 100)
     done = int(perc / 2)
-    sys.stdout.write('\r %02d%% [%s%s] %s' % (perc, '=' * done, ' ' * (50-done), title))   
+    sys.stdout.write('\r %02d%% [%s%s] %s' % (perc, '=' * done, ' ' * (50-done), title))
     sys.stdout.flush()
 
 
 # ========== input path, settings ==========
 def input():
-    #input
+    # input
     parser = argparse.ArgumentParser(description='Unzip .tgz file and edit apps.conf file', add_help=True)
     parser.add_argument('--dir', '-d', dest='dir', help='(required) Enter app directory')
     parser.add_argument('--unzip', '-z', dest='unzip', help='(Optional) Unzip .tgz files or NOT [0|1] (default 1)', default=1, type=int)
@@ -79,7 +81,7 @@ def input():
     except Exception as e:
         sys.stdout.write('ERROR %s' % e)
         sys.exit()
-        
+
     for i in range(3):
         try:
             if flag[i] != 0 and flag[i] != 1:
@@ -88,26 +90,26 @@ def input():
             sys.stdout.write('ERROR %s' % e)
             sys.exit()
 
+
 # ========== make .tgz file list and call 'unzip_tgz_file' func to unzip ==========
 def unzip_dir():
     # get all file list
     file_list = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     # init progress bar
     pb, total_len = init_pb(len(file_list))
-    
+
     for file in file_list:
         # add progress bar count
         pb += 1
-        #unzip .tgz file 
+        # unzip .tgz file
         file = join(mypath, file)
         if tarfile.is_tarfile(file):
             try:
                 unzip_tgz_file(file, extract_path=mypath)
             except Exception as e:
                 print(e)
-            #draw progress bar
+            # draw progress bar
             draw_pb(pb, total_len, 'Unzip')
-
 
 
 # ========== unzip .tgz file ==========
@@ -120,28 +122,29 @@ def unzip_tgz_file(tar_url, extract_path='.'):
             unzip_tgz_file(item.name, "./" + item.name[:item.name.rfind('/')])
     try:
         unzip_tgz_file(sys.argv[1] + '.tgz')
-    except:
+    except Exception as e:
         name = os.path.basename(sys.argv[0])
+        sys.stdout.error(e)
 
 
 # ========== add local dir and apps.conf file ==========
 def set_config(path):
-    #check local dir exists or not
+    # check local dir exists or not
     local_path = join(mypath, path, 'local')
-    
-    #if not exists local dir, make dir
+
+    # if not exists local dir, make dir
     if not os.path.exists(local_path):
         os.mkdir(local_path)
-        
-    #add apps.conf file
-    file_path = join(local_path, 'apps.conf')
-    #set config
-    config = configparser.ConfigParser()
-    # set visible and update check 
-    config['ui'] = {'is_visible' : 0} if flag[2] == 0 else {'is_visible' : 1}
-    config['package'] = {'check_for_updates' : 0} if flag[3] == 0 else {'check_for_updates' : 1}
 
-    #save as file
+    # add apps.conf file
+    file_path = join(local_path, 'apps.conf')
+    # set config
+    config = configparser.ConfigParser()
+    # set visible and update check
+    config['ui'] = {'is_visible': 0} if flag[2] == 0 else {'is_visible': 1}
+    config['package'] = {'check_for_updates': 0} if flag[3] == 0 else {'check_for_updates': 1}
+
+    # save as file
     with open(file_path, 'w') as f:
         config.write(f)
 
@@ -151,43 +154,43 @@ def remove_tgz():
     file_list = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     # init progress bar
     pb, total_len = init_pb(len(file_list))
-    
+
     for file in file_list:
         # add progress bar count
         pb += 1
-        #unzip .tgz file 
+        # unzip .tgz file
         file = join(mypath, file)
         if tarfile.is_tarfile(file):
             try:
                 os.remove(file)
             except Exception as e:
                 print(e)
-            #draw progress bar
+            # draw progress bar
             draw_pb(pb, total_len, 'Remove')
 
 
-# ========== main ==========    
-if __name__ == "__main__": 
+# ========== main ==========
+if __name__ == "__main__":
     # print ascii art
     init_page()
     # Input Dir
     input()
-    
-    # unzip 
+
+    # unzip
     if flag[0] == 1:
         unzip_dir()
         sys.stdout.write('\n')
-    
+
     # Set apps.conf
     # get all dir list
     if flag[1] == 0:
         dir_list = [dir for dir in listdir(mypath) if isdir(join(mypath, dir))]
-    elif flag[1] == 1: 
+    elif flag[1] == 1:
         dir_list = [dir for dir in listdir(mypath) if isdir(join(mypath, dir)) and len(re.findall(keyword, dir)) > 0]
     # init progress bar
     pb, total_len = init_pb(len(dir_list))
-    
-    for dir in dir_list: 
+
+    for dir in dir_list:
         pb += 1
         try:
             set_config(dir)
@@ -196,11 +199,9 @@ if __name__ == "__main__":
         # draw progress bar
         draw_pb(pb, total_len, 'Set Config')
     sys.stdout.write('\n')
-        
+
     # remove .tgz files
     if flag[4] == 1:
         remove_tgz()
-    
-    
-    print('\n\nDone!')
 
+    sys.stdout.write('\nDone!')
