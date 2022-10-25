@@ -155,7 +155,6 @@ if __name__ == "__main__":
     # Input Dir
     input()
     
-    print(mypath)
     # unzip 
     if flag[0] == 1:
         unzip_dir()
