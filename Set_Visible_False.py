@@ -23,7 +23,6 @@ import datetime
 
 
 # mypath = '/Users/denver/Downloads/viz_apps_copy'
-keyword = ''
 flag = [0, 0, 0, 0]
 
 
@@ -69,8 +68,9 @@ def input():
     global mypath
     mypath = args.dir
     flag[0] = args.unzip
+    global keyword
     keyword = args.keyword
-    flag[1] = 0 if keyword != '' else 1
+    flag[1] = 0 if keyword == '' else 1
     flag[2] = args.isvisible
     flag[3] = args.update
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     if flag[1] == 0:
         dir_list = [dir for dir in listdir(mypath) if isdir(join(mypath, dir))]
     elif flag[1] == 1: 
-        dir_list = [dir for dir in listdir(mypath) if isdir(join(mypath, dir)) and len(re.findall(r'', dir)) > 0]
+        dir_list = [dir for dir in listdir(mypath) if isdir(join(mypath, dir)) and len(re.findall(keyword, dir)) > 0]
     # init progress bar
     pb, total_len = init_pb(len(dir_list))
     
