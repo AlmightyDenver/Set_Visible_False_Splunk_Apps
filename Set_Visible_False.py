@@ -6,7 +6,7 @@
 # Created By  : DenverAlmighty
 # Created Date: 2022-10-24
 # Updated Date : 2022-10-25
-# version = '1.0.0'
+# version = '1.0.1'
 # ---------------------------------------------------------------------------
 
 import tarfile
