@@ -9,7 +9,6 @@
 # version = '1.0.0'
 # ---------------------------------------------------------------------------
 
-
 import tarfile
 import os
 import sys
@@ -105,26 +104,21 @@ def unzip_dir():
         file = join(mypath, file)
         if tarfile.is_tarfile(file):
             try:
-                unzip_tgz_file(file, extract_path=mypath)
+                unzip_tgz_file(file, mypath)
             except Exception as e:
                 print(e)
             # draw progress bar
             draw_pb(pb, total_len, 'Unzip')
-
+regex = r'\d+'
 
 # ========== unzip .tgz file ==========
-def unzip_tgz_file(tar_url, extract_path='.'):
+def unzip_tgz_file(tar_url, extract_path):
     tar = tarfile.open(tar_url, 'r')
-    tar.extractall()
-    for item in tar:
-        tar.extract(item, extract_path)
-        if item.name.find(".tgz") != -1 or item.name.find(".tar") != -1:
-            unzip_tgz_file(item.name, "./" + item.name[:item.name.rfind('/')])
     try:
-        unzip_tgz_file(sys.argv[1] + '.tgz')
+        tar.extractall(path=extract_path)
+        tar.close()
     except Exception as e:
-        name = os.path.basename(sys.argv[0])
-        sys.stdout.error(e)
+        print(e)
 
 
 # ========== add local dir and apps.conf file ==========
